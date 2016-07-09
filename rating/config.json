@@ -1,0 +1,13 @@
+{
+  "name": "Rating",
+  "version": "0.17",
+  "developer": "Flipbox Factory",
+  "developerUrl": "https://flipboxfactory.com/",
+  "components": {
+    "collection": "craft\\plugins\\rating\\services\\Collection",
+    "collectionField": "craft\\plugins\\rating\\services\\CollectionField",
+    "field": "craft\\plugins\\rating\\services\\Field",
+    "rating": "craft\\plugins\\rating\\services\\Rating",
+    "setting": "craft\\plugins\\rating\\services\\Setting"
+  }
+}

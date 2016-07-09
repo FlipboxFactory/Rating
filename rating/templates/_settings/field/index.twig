@@ -1,0 +1,55 @@
+{% extends "rating/_layouts/cp" %}
+
+{% block sidebar %}
+
+    {% include 'rating/_settings/__sidebar' only %}
+
+{% endblock %}
+
+{% set content %}
+    <div id="nofields" class="alert alert-info{% if fields %} hidden{% endif %}">
+        <p>{{ "No fields exist."|t }}</p>
+    </div>
+
+    {% if fields|length %}
+        <table id="fields" class="data fullwidth collapsible">
+            <thead>
+            <th scope="col">{{ "Name"|t }}</th>
+            <th scope="col">{{ "Handle"|t }}</th>
+            <th scope="col" width="10%">{{ "Min"|t }}</th>
+            <th scope="col" width="10%">{{ "Max"|t }}</th>
+            <th scope="col" width="10%">{{ "Increment"|t }}</th>
+            <th scope="col" width="10%">{{ "Precision"|t }}</th>
+            <td class="thin"></td>
+            </thead>
+            <tbody>
+            {% for field in fields %}
+                <tr data-id="{{ field.id }}" data-name="{{ field.name|t }}">
+                    <th scope="row" data-title="{{ 'Name'|t }}"><a
+                                href="{{ url(baseActionPath~'/'~field.id) }}">{{ field.name|t }}</a></th>
+                    <td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
+                    <td data-title="{{ 'Min'|t }}"><code>{{ field.min }}</code></td>
+                    <td data-title="{{ 'Max'|t }}"><code>{{ field.max }}</code></td>
+                    <td data-title="{{ 'Increment'|t }}"><code>{{ field.increment }}</code></td>
+                    <td data-title="{{ 'Precision'|t }}"><code>{{ field.precision }}</code></td>
+                    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <div class="buttons">
+        <a href="{{ url(baseActionPath~'/new') }}" class="btn submit add icon">{{ "New field"|t }}</a>
+    </div>
+{% endset %}
+
+
+{% registerjs %}
+new Craft.AdminTable({
+tableSelector: '#fields',
+noItemsSelector: '#nofields',
+deleteAction: '{{ baseActionPath~'/delete' }}',
+confirmDeleteMessage: '{{ "Are you sure you want to delete '{name}' and all values associated to it?"|t('rating') }}',
+});
+{% endregisterjs %}

@@ -1,0 +1,128 @@
+{% extends "rating/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% hook "cp.rating.edit" %}
+
+{% block main %}
+
+    <form id="entry-form" method="post" accept-charset="UTF-8" data-saveshortcut
+          data-saveshortcut-redirect="{{ continueEditingUrl }}" data-confirm-unload>
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="{{ baseActionPath~'/save' }}">
+        <input type="hidden" name="redirect" value="{{ baseCpPath }}">
+        <input type="hidden" name="collection" value="{{ rating.collection.id }}">
+        {% if rating.id %}<input type="hidden" name="id" value="{{ rating.id }}">{% endif %}
+
+        <div class="grid first">
+            <div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+                <div id="fields" class="pane">
+                    {% include "rating/_tabs" with {
+                    rating: rating,
+                    fieldLayout: rating.fieldLayout,
+                    baseActionPath: baseActionPath,
+                    baseCpPath: baseCpPath
+                    } only %}
+                </div>
+            </div>
+
+            <div class="item" data-position="right" data-colspan="1">
+
+                <div id="settings" class="pane">
+
+                    {{ forms.elementSelectField({
+                        'label': "Element"|t('rating'),
+                        'required': true,
+                        'jsClass': 'Craft.BaseElementSelectInput',
+                        'elementType': rating.collection.elementType,
+                        'id': 'elementSelectInput',
+                        'fieldId': 'element',
+                        'storageKey': 'field.element',
+                        'name': 'element',
+                        'elements': rating.element ? craft.elements.elementInstance(rating.collection.elementType).find().id(rating.element.id),
+                        'sources': '*',
+                        'criteria': [],
+                        'sourceElementId': rating.id ?: null,
+                        'limit': 1,
+                        'selectionLabel': "Add Element"
+                    }) }}
+
+                    {{ forms.elementSelectField({
+                        'label': "Owner"|t('rating'),
+                        'jsClass': 'Craft.BaseElementSelectInput',
+                        'elementType': 'craft\\app\\elements\\User',
+                        'id': 'ownerSelectInput',
+                        'fieldId': 'owner',
+                        'storageKey': 'owner',
+                        'name': 'owner',
+                        'elements': rating.owner ? craft.users.id(rating.owner.id) : '',
+                        'sources': '*',
+                        'criteria': [],
+                        'sourceElementId': rating.id ?: null,
+                        'limit': 1,
+                        'selectionLabel': "Add Owner"
+                    }) }}
+
+                    {{ forms.dateTimeField({
+                        label: "Entry Date"|t('app'),
+                        id: 'dateCreated',
+                        name: 'dateCreated',
+                        value: (rating.dateCreated ? rating.dateCreated : null),
+                        errors: rating.getErrors('dateCreated')
+                    }) }}
+
+                    {{ forms.selectField({
+                        label: "Status"|t('rating'),
+                        name: "status",
+                        options : statusOptions,
+                        id: 'status',
+                        value: rating.id ? rating.status : 'pending',
+                        errors: rating.getErrors('status'),
+                        autofocus: true,
+                        required: true
+                    }) }}
+
+                </div>
+
+                {# Give plugins a chance to add other panes here #}
+                {% hook "cp.rating.edit.right-pane" %}
+
+                <hr>
+
+
+                <div class="btngroup submit first">
+                    <input type="submit" class="btn submit" value="{{ 'Save'|t('app') }}">
+
+                    <div class="btn submit menubtn"></div>
+                    <div class="menu">
+                        <ul>
+                            <li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">
+                                    {{ "Save and continue editing"|t('app') }}
+                                    {{ forms.optionShortcutLabel('S') }}
+                                </a></li>
+                            <li><a class="formsubmit"
+                                   data-redirect="{{ newRecordUrl }}">{{ "Save and add another"|t('app') }}</a></li>
+                        </ul>
+                        {% if rating.id %}
+                            <hr>
+                            <ul>
+                                <li><a class="formsubmit" data-action="{{ baseActionPath~'/delete' }}"
+                                       data-confirm="{{ 'Are you sure you want to delete this rating?'|t('rating') }}">{{ "Delete"|t('app') }}</a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <!--/item-->
+        </div>
+        <!--/grid-->
+    </form>
+{% endblock %}
+
+
+{% if not rating.slug %}
+    {% registerjs %}
+    window.slugGenerator = new Craft.SlugGenerator('#title', '#slug');
+    {% endregisterjs %}
+{% endif %}

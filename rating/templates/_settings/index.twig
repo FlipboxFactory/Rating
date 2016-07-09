@@ -1,0 +1,49 @@
+{% extends "rating/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% block sidebar %}
+    {% include 'rating/_settings/__sidebar' only %}
+{% endblock %}
+
+{% block content %}
+
+    <form id="entry-form" method="post" accept-charset="UTF-8" data-saveshortcut
+          data-saveshortcut-redirect="{{ baseCpPath }}" data-confirm-unload>
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="{{ baseActionPath~'/save' }}">
+        <input type="hidden" name="redirect" value="{{ baseCpPath }}">
+
+        {% set cols = {
+        'label' : {
+        type: 'singleline',
+        heading: 'Label',
+        width: '50'
+        },
+        'value' : {
+        type: 'singleline',
+        heading: 'Value',
+        width: '50'
+        }
+        } %}
+
+        {% set rows = [] %}
+        {% for statusValue, statusLabel in settings.statuses %}
+            {% set rows = rows|merge([{label: statusLabel, value: statusValue}]) %}
+        {% endfor %}
+        {{ forms.editableTableField({
+            label: "Statuses"|t('rating'),
+            instructions: "Enter each status on a new row."|t('rating'),
+            id: 'statuses',
+            name: 'statuses',
+            cols: cols,
+            rows:rows,
+            errors: settings.getErrors('statuses')
+        }) }}
+
+        <div class="submit">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('app') }}">
+        </div>
+
+    </form>
+
+{% endblock %}

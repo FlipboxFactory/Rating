@@ -1,0 +1,25 @@
+{% set baseCpPath = 'rating/settings' %}
+{% set selected = selected is defined ? selected : craft.request.segment(3) %}
+{% set nav = {
+general : {
+label: 'General',
+uri: ''
+},
+field : {
+label: 'Fields',
+uri: 'field'
+},
+collection : {
+label: 'Collections',
+uri: 'collection'
+}
+} %}
+<nav>
+    <ul>
+        <li class="heading"><span>Navigation</span></li>
+        {% for navKey, navItem in nav %}
+            <li><a tabindex="0"{% if selected == navItem.uri %} class="sel"{% endif %}
+                   href="{{ url(baseCpPath ~ (navItem.uri ? '/'~navItem.uri : '')) }}">{{ navItem.label }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>

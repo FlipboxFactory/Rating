@@ -1,0 +1,97 @@
+{% extends "rating/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% block sidebar %}
+
+    {% include 'rating/_settings/__sidebar' only %}
+
+{% endblock %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8" data-saveshortcut
+          data-saveshortcut-redirect="{{ continueEditingUrl }}" data-confirm-unload>
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="{{ baseActionPath }}/save">
+        <input type="hidden" name="redirect" value="{{ baseCpPath }}">
+        {% if collection.id %}<input type="hidden" name="id" value="{{ collection.id }}">{% endif %}
+
+        {{ forms.textField({
+            first: true,
+            label: "Name"|t,
+            instructions: "What this collection will be called in the CP."|t,
+            id: 'name',
+            name: 'name',
+            value: collection.name,
+            errors: collection.getErrors('name'),
+            autofocus: true,
+            required: true,
+            translatable: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Handle"|t,
+            instructions: "How you’ll refer to this collection in the templates."|t,
+            id: 'handle',
+            class: 'code',
+            name: 'handle',
+            value: collection.handle,
+            errors: collection.getErrors('handle'),
+            required: true
+        }) }}
+
+        {{ forms.selectField({
+            label: "Element Type"|t('rating'),
+            instructions: "Identify the element type which you want to rate."|t('rating'),
+            id: 'elementType',
+            name: 'elementType',
+            options: elementTypeOptions,
+            value: collection.id ? collection.getElementType() : '',
+            errors: collection.getError('elementType'),
+            toggle: true
+        }) }}
+
+        {% set selectedRatingFields = [] %}
+        {% for ratingField in collection.getRatingFields() %}
+            {% set selectedRatingFields = selectedRatingFields|merge([ratingField.id]) %}
+        {% endfor %}
+        {{ forms.multiselectField({
+            label: "Fields"|t('rating'),
+            instructions: "Identify the fields which this collection can use."|t('rating'),
+            id: 'ratingFields',
+            name: 'ratingFields',
+            options: ratingFieldOptions,
+            values: selectedRatingFields,
+            errors: collection.getError('ratingFields')
+        }) }}
+
+        <hr/>
+
+        {% include "_includes/fieldlayoutdesigner" with {
+        fieldLayout: collection.getFieldLayout()
+        } only %}
+
+        <hr>
+
+        <div class="btngroup submit">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('app') }}">
+
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <ul>
+                    <li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">
+                            {{ "Save and continue editing"|t('rating') }}
+                            {{ forms.optionShortcutLabel('S') }}
+                        </a></li>
+                    <li><a class="formsubmit" data-redirect="{{ baseCpPath }}/new">
+                            {{ "Save and add another"|t('rating') }}
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}
+
+{% registerjs %}
+    {% if not collection.handle %}new Craft.HandleGenerator('#name', '#handle');{% endif %}
+{% endregisterjs %}

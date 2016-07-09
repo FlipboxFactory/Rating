@@ -1,0 +1,24 @@
+<?php // v{VERSION} */
+/**
+ * Rating Plugin for Craft CMS
+ *
+ * @package   Rating
+ * @author    Flipbox Factory
+ * @copyright Copyright (c) 2015, Flipbox Digital
+ * @link      https://flipboxfactory.com/craft/rating/
+ * @license   https://flipboxfactory.com/craft/rating/license
+ */
+
+namespace craft\plugins\rating\elements\db\traits;
+
+use craft\plugins\rating\elements\traits\Rating as RatingTrait;
+
+/**
+ * Rating Query trait
+ *
+{METHODS}
+ */
+trait Rating
+{
+	use RatingTrait;
+}

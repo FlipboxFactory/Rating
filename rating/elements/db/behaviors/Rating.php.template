@@ -1,0 +1,27 @@
+<?php // v{VERSION} */
+/**
+ * Rating Plugin for Craft CMS
+ *
+ * @package   Rating
+ * @author    Flipbox Factory
+ * @copyright Copyright (c) 2015, Flipbox Digital
+ * @link      https://flipboxfactory.com/craft/rating/
+ * @license   https://flipboxfactory.com/craft/rating/license
+ */
+
+namespace craft\plugins\rating\elements\db\behaviors;
+
+use craft\plugins\rating\elements\behaviors\Rating as RatingBehavior;
+
+/**
+ * Rating Query behavior
+ *
+ * This class provides attributes for all the unique custom rating field handles.
+ */
+class Rating extends RatingBehavior
+{
+	// Public Methods
+	// =========================================================================
+
+/* METHODS */
+}

@@ -1,0 +1,104 @@
+{% extends "rating/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% block sidebar %}
+
+    {% include 'rating/_settings/__sidebar' only %}
+
+{% endblock %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8" data-saveshortcut
+          data-saveshortcut-redirect="{{ continueEditingUrl }}" data-confirm-unload>
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="{{ baseActionPath }}/save">
+        <input type="hidden" name="redirect" value="{{ baseActionPath }}">
+        {% if field.id %}<input type="hidden" name="id" value="{{ field.id }}">{% endif %}
+
+        {{ forms.textField({
+            first: true,
+            label: "Name"|t,
+            instructions: "What this field will be called in the CP."|t,
+            id: 'name',
+            name: 'name',
+            value: field.name,
+            errors: field.getErrors('name'),
+            autofocus: true,
+            required: true,
+            translatable: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Handle"|t,
+            instructions: "How you’ll refer to this field in the templates."|t,
+            id: 'handle',
+            class: 'code',
+            name: 'handle',
+            value: field.handle,
+            errors: field.getErrors('handle'),
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Min Value"|t,
+            instructions: "Identify the minimum rating value."|t,
+            id: 'min',
+            name: 'min',
+            value: field.min,
+            errors: field.getErrors('min'),
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Max Value"|t,
+            instructions: "Identify the maximum rating value."|t,
+            id: 'max',
+            name: 'max',
+            value: field.max,
+            errors: field.getErrors('max'),
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Increment"|t,
+            instructions: "Identify the rating increment value."|t,
+            id: 'increment',
+            name: 'increment',
+            value: field.increment,
+            errors: field.getErrors('increment'),
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Precision"|t,
+            instructions: "Identify the rating precision value (the number of decimals)."|t,
+            id: 'precision',
+            name: 'precision',
+            value: field.precision,
+            errors: field.getErrors('precision'),
+            required: true
+        }) }}
+
+        <div class="btngroup submit">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('app') }}">
+
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <ul>
+                    <li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">
+                            {{ "Save and continue editing"|t('rating') }}
+                            {{ forms.optionShortcutLabel('S') }}
+                        </a></li>
+                    <li><a class="formsubmit" data-redirect="{{ baseCpPath }}/new">
+                            {{ "Save and add another"|t('rating') }}
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}
+
+{% registerjs %}
+    {% if not field.handle %}new Craft.HandleGenerator('#name', '#handle');{% endif %}
+{% endregisterjs %}

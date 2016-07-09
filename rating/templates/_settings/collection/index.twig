@@ -1,0 +1,46 @@
+{% extends "rating/_layouts/cp" %}
+
+{% block sidebar %}
+
+    {% include 'rating/_settings/__sidebar' only %}
+
+{% endblock %}
+
+{% set content %}
+    <div id="nocollections" class="alert alert-info{% if collections %} hidden{% endif %}">
+        <p>{{ "To begin, create your first Collection."|t }}</p>
+    </div>
+
+    {% if collections|length %}
+        <table id="collections" class="data fullwidth collapsible">
+            <thead>
+            <th scope="col">{{ "Name"|t }}</th>
+            <th scope="col">{{ "Handle"|t }}</th>
+            <td class="thin"></td>
+            </thead>
+            <tbody>
+            {% for collection in collections %}
+                <tr data-id="{{ collection.id }}" data-name="{{ collection.name|t }}">
+                    <th scope="row" data-title="{{ 'Name'|t }}"><a
+                                href="{{ url(baseActionPath~'/'~collection.id) }}">{{ collection.name|t }}</a></th>
+                    <td data-title="{{ 'Handle'|t }}"><code>{{ collection.handle }}</code></td>
+                    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <div class="buttons">
+        <a href="{{ url(baseActionPath~'/new') }}" class="btn submit add icon">{{ "New collection"|t }}</a>
+    </div>
+{% endset %}
+
+{% registerjs %}
+new Craft.AdminTable({
+tableSelector: '#collections',
+noItemsSelector: '#nocollections',
+deleteAction: '{{ baseActionPath~'/delete' }}',
+confirmDeleteMessage: '{{ "Are you sure you want to delete the {name} Collection and all data associated to it?"|t('rating') }}',
+});
+{% endregisterjs %}

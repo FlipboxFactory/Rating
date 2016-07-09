@@ -1,0 +1,20 @@
+{% set title = title is defined ?: null %}
+
+<nav id="tabs" class="tabs">
+    <ul>
+        {% for tabId, tab in tabs %}
+            {% if tab %}
+                {% set tabIsSelected = ((selectedTab is not defined and loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
+
+                {% if tabIsSelected and title != tab.label %}
+                    {% set title = title~' - '~tab.label %}
+                {% endif -%}
+
+                <li{% if tab.liClass is defined %} class="{{ tab.liClass }}"{% endif %}><a id="tab-{{ tabId }}"
+                                                                                           class="tab{% if tabIsSelected %} sel{% endif %}{% if tab.class is defined %} {{ tab.class }}{% endif %}"
+                                                                                           href="{{ tab.url }}" {% if tab.dataIcon is defined %} data-icon="{{ tab.dataIcon }}"{% endif %}>{{ tab.label }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,0 +1,11 @@
+.alert {
+    padding: 20px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.alert.alert-info {
+    background-color: #DEE3EA;
+    border-color: #818C98;
+    color: #818C98;
+}

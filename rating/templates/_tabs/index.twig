@@ -1,0 +1,53 @@
+{% import "_includes/forms" as forms %}
+
+{% set tabs = [{
+label: 'Ratings',
+url: '#tab0',
+class: null
+}] %}
+{% for tab in fieldLayout.tabs %}
+    {% set hasErrors = false %}
+
+    {% if rating.hasErrors() %}
+        {% for field in tab.fields %}
+            {% set hasErrors = rating.getErrors(field.handle) ? true : hasErrors %}
+        {% endfor %}
+    {% endif %}
+
+    {% set tabs = tabs|merge([{
+    label: tab.name,
+    url: '#tab'~loop.index,
+    class: hasErrors ? 'error' : null
+    }]) %}
+
+{% endfor %}
+
+
+{% include "rating/_includes/tabs" with {
+tabs: tabs
+} only %}
+
+<div id="tab0">
+    {% namespace 'ratings' %}
+    {% for ratingField in rating.ratingFields %}
+        {{ forms.selectField({
+            label: ratingField.name|t('rating'),
+            id: ratingField.handle,
+            name: ratingField.handle,
+            options: ratingField.options,
+            value: ratingField.value,
+            errors: ratingField.errors
+        }) }}
+    {% endfor %}
+    {% endnamespace %}
+</div>
+
+{% for tab in fieldLayout.tabs %}
+    <div id="tab{{ loop.index }}" class="hidden">
+        {% include "_includes/fields" with {
+        fields: tab.getFields(),
+        element: rating
+        } only %}
+    </div>
+{% endfor %}
+

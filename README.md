@@ -1,0 +1,1 @@
+# Rating plugin for Craft 3
