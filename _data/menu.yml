@@ -1,0 +1,45 @@
+- text: Getting Started
+  url: /
+  subitems:
+  - text: Introduction
+    url: /
+  - text: Installation / Upgrading
+    url: /install/
+  - text: Support
+    url: /support/
+  - text: Changelog
+    url: /changelog/
+
+- text: Templating
+  url: /twig/
+  subitems:
+  - text: Introduction
+    url: /twig/
+  - text: Tags
+    url: /twig/tags/
+    subitems:
+      - text: Rating
+        url: /twig/tags/rating/
+      - text: Collection
+        url: /twig/tags/collection/
+      - text: Settings
+        url: /twig/tags/settings/
+  - text: Filters
+    url: /twig/filters/
+- text: Elements
+  url: /elements/
+  subitems:
+    - text: Rating
+      url: /elements/rating/
+- text: Queries
+  url: /queries/
+  subitems:
+    - text: Rating
+      url: /queries/rating/
+- text: Models
+  url: /models/
+  subitems:
+    - text: Collection
+      url: /models/collection/
+    - text: Field
+      url: /models/field/
